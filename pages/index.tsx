@@ -1,20 +1,13 @@
 import Head from "next/head";
+import { useRecoilValue } from "recoil";
+import { modalState } from "../atoms/modalAtom";
 import Banner from "../components/Banner";
 import Header from "../components/Header";
+import Modal from "../components/Modal";
 import Rows from "../components/Rows";
-import { Movie } from "../typings";
+import useAuth from "../hooks/useAuth";
 import requests from "../utils/requests";
-
-interface Props {
-	netflixOriginals: Movie[];
-	actionMovies: Movie[];
-	comedyMovies: Movie[];
-	documentaries: Movie[];
-	horrorMovies: Movie[];
-	romanceMovies: Movie[];
-	topRated: Movie[];
-	trendingNow: Movie[];
-}
+import { Props } from "../constants/categories";
 
 const Home = ({
 	netflixOriginals,
@@ -26,10 +19,13 @@ const Home = ({
 	topRated,
 	trendingNow,
 }: Props) => {
-	return (
+	const { loading } = useAuth();
+	const showModal = useRecoilValue(modalState);
+
+	return !loading ? (
 		<div className="relative h-screen bg-gradient-to-b lg:h-[140vh]">
 			<Head>
-				<title>Create Next App</title>
+				<title>Home - Ethio-Cinema</title>
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 			<Header />
@@ -46,8 +42,9 @@ const Home = ({
 				</section>
 			</main>
 			{/* Modal */}
+			{showModal && <Modal />}
 		</div>
-	);
+	) : null;
 };
 
 export default Home;
